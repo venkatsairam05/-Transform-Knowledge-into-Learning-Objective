@@ -414,12 +414,23 @@ def init_state():
 
 
 def render_sidebar():
+    secret_key = ""
+    try:
+        secret_key = st.secrets.get("OPENAI_API_KEY", "")
+    except Exception:
+        pass
+
     with st.sidebar:
         st.markdown(
             "<h3>\U00002699\ufe0f Configuration</h3>",
             unsafe_allow_html=True,
         )
-        api_key = st.text_input("OpenAI API Key", type="password", placeholder="sk-...")
+        if secret_key:
+            st.success("\U0001f512 API key loaded from deployment secrets.")
+        api_key = st.text_input(
+            "OpenAI API Key", type="password", placeholder="sk-...",
+            value=secret_key if secret_key else "", help="Loaded from secrets if deployed.",
+        )
         model = st.selectbox("Model", ["gpt-4o", "gpt-4o-mini", "gpt-4-turbo"], index=0)
         temperature = st.slider("Creativity", 0.0, 1.0, 0.7, 0.05)
         st.divider()
