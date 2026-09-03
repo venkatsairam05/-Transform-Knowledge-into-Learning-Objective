@@ -5,10 +5,11 @@ An AI-powered application that transforms knowledge from documents or text promp
 ## Features
 
 - **Multiple Input Sources**: Accept PDF files, plain text files (.txt, .md), or direct text prompts
+- **Web Interface**: Interactive Streamlit UI with course visualization and quiz interactivity
 - **Structured Output**: Generates a complete course with title, learning objectives, lesson outline, quiz questions, and lesson summaries — all in valid JSON
 - **Robust Error Handling**: Retries on API failures, validates input and output, handles malformed responses
-- **Configurable**: Choose model, temperature, and output path via CLI arguments
-- **Two Entry Points**: CLI module (`python -m src`) or standalone script (`python run.py`)
+- **Configurable**: Choose model, temperature, and output path
+- **Multiple Entry Points**: Web app (`streamlit run app.py`), CLI module (`python -m src`), or standalone script (`python run.py`)
 
 ## Technology Stack
 
@@ -16,6 +17,7 @@ An AI-powered application that transforms knowledge from documents or text promp
 |-----------|-----------|
 | Language | Python 3.10+ |
 | LLM Provider | OpenAI (GPT-4o) |
+| Web UI | Streamlit |
 | PDF Processing | PyPDF2 |
 | Configuration | python-dotenv |
 
@@ -105,6 +107,24 @@ python run.py --prompt "Data Structures and Algorithms" --model gpt-4o-mini --te
 | `--output`, `-o` | Output JSON file path | `output/course_<timestamp>.json` |
 | `--model`, `-m` | OpenAI model identifier | `gpt-4o` |
 | `--temperature`, `-t` | Generation temperature | `0.7` |
+
+### Option C: Web Application (Streamlit)
+
+Launch the interactive web UI:
+
+```bash
+streamlit run app.py
+```
+
+The app will open in your browser at `http://localhost:8501`.
+
+**Features of the web UI:**
+- Enter a text prompt or upload a PDF/TXT/MD file
+- Configure API key, model, and temperature from the sidebar
+- View generated courses with expandable lesson summaries
+- Interactive quiz with answer selection and explanations
+- Download the course as JSON
+- View raw JSON output
 
 ## How the API Integration Works
 
@@ -205,6 +225,7 @@ Input (text/file) → DocumentProcessor → PromptEngineer → LLMService → Va
 
 | Module | Responsibility |
 |--------|---------------|
+| `app.py` | Streamlit web interface with interactive course display |
 | `src/models.py` | Data models (`CourseOutput`, `QuizQuestion`) with serialization |
 | `src/document_processor.py` | Input handling — PDF extraction, text reading, truncation |
 | `src/prompt_engineer.py` | Prompt construction and raw response parsing |
@@ -231,6 +252,7 @@ Input (text/file) → DocumentProcessor → PromptEngineer → LLMService → Va
 | `openai` (v1.0+) | Official OpenAI Python SDK for API communication |
 | `PyPDF2` (v3.0+) | PDF text extraction |
 | `python-dotenv` (v1.0+) | Loading environment variables from `.env` files |
+| `streamlit` (v1.30+) | Web interface and interactive UI |
 
 ## Assumptions, Limitations, and Future Improvements
 
@@ -249,8 +271,7 @@ Input (text/file) → DocumentProcessor → PromptEngineer → LLMService → Va
 - Support for additional LLM providers (Anthropic Claude, Google Gemini)
 - Multi-file input consolidation
 - OCR support for scanned PDFs
-- Web-based UI with Streamlit or FastAPI
 - Support for more quiz question types (true/false, fill-in-the-blank)
 - Course progress tracking and adaptive content generation
 - Streaming response for real-time output display
-- Support for additional output formats (Markdown, HTML)
+- User accounts and cloud deployment (Streamlit Community Cloud)
