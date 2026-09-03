@@ -495,7 +495,7 @@ def render_hero():
     st.markdown(
         """
         <div class="hero">
-            <div class="hero-badge">AI-Powered Learning</div>
+            <div class="hero-badge">AI-Powered Learning \u00b7 v2.0</div>
             <h1 class="hero-title">CourseForge AI</h1>
             <div class="hero-sub">Turn any knowledge into a stunning interactive course — lessons,
             quizzes, flashcards & an AI tutor.</div>
