@@ -42,7 +42,7 @@ def resolve_key(provider: str, api_key: str) -> str:
 def get_llm(provider: str, api_key: str | None = None, model: str = "") -> object:
     key = resolve_key(provider, api_key or "")
     provider_model = {
-        "gemini": "gemini-2.0-flash",
+        "gemini": "gemini-3.6-flash",
         "openai": "gpt-4o",
     }.get((provider or "openai").lower(), "gpt-4o")
     if not model:

@@ -161,7 +161,7 @@ class OpenAIProvider(LLMClient):
 
 
 class GeminiProvider(LLMClient):
-    def __init__(self, api_key: str, model: str = "gemini-2.0-flash", temperature: float = 0.7, max_retries: int = 3):
+    def __init__(self, api_key: str, model: str = "gemini-3.6-flash", temperature: float = 0.7, max_retries: int = 3):
         super().__init__(model, temperature, max_retries)
         from google import genai
         from google.genai import types
@@ -208,7 +208,7 @@ def create_llm(
 
     if provider == "gemini":
         if model == "gpt-4o" or not model:
-            model = "gemini-2.0-flash"
+            model = "gemini-3.6-flash"
         return GeminiProvider(api_key=api_key, model=model, temperature=temperature, max_retries=max_retries)
 
     # default: openai
