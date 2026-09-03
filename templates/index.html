@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CourseForge AI</title>
+  <link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body>
+  <div class="orbs">
+    <div class="orb orb-1"></div>
+    <div class="orb orb-2"></div>
+    <div class="orb orb-3"></div>
+  </div>
+
+  <div class="container">
+    <!-- Hero -->
+    <header class="hero">
+      <span class="badge">AI-Powered Learning</span>
+      <h1 class="title">CourseForge AI</h1>
+      <p class="subtitle">Turn any knowledge into a stunning interactive course — lessons, quizzes, flashcards & an AI tutor.</p>
+      <div class="chips">
+        <span class="chip">✨ AI Generation</span>
+        <span class="chip">📖 Interactive Lessons</span>
+        <span class="chip">❓ Smart Quizzes</span>
+        <span class="chip">💡 Flashcards</span>
+        <span class="chip">💬 AI Tutor</span>
+      </div>
+    </header>
+
+    <!-- Generate -->
+    <section class="card glass" id="generateCard">
+      <h2>🎨 Create a Course</h2>
+      <div class="mode-toggle">
+        <button class="mode-btn active" data-mode="text" id="modeText">Text Prompt</button>
+        <button class="mode-btn" data-mode="file" id="modeFile">Upload Document</button>
+      </div>
+      <textarea id="contentInput" rows="6" placeholder="e.g., Introduction to Quantum Mechanics, Machine Learning basics..."></textarea>
+      <div class="file-row" id="fileRow" style="display:none;">
+        <input type="file" id="fileInput" accept=".pdf,.txt,.md">
+      </div>
+      <div class="error" id="errorBox" style="display:none;"></div>
+      <button class="primary-btn" id="generateBtn">🚀 Generate Course</button>
+      <div class="provider-row">
+        <span class="provider-label">AI Provider:</span>
+        <button class="provider-btn active" data-provider="openai" id="providerOpenAI">OpenAI</button>
+        <button class="provider-btn" data-provider="gemini" id="providerGemini">Gemini (free)</button>
+      </div>
+      <div class="api-key-row">
+        <input type="password" id="apiKeyInput" placeholder="Enter API key for the selected provider (optional if set in server)">
+      </div>
+    </section>
+
+    <!-- Overview section: hidden until course generated -->
+    <section id="resultSection" style="display:none;">
+      <div class="stats" id="statsRow"></div>
+      <i class="course-title" id="courseTitle"></i>
+
+      <div class="tabbar" id="tabbar">
+        <button class="tab active" data-tab="lessons">📖 Course</button>
+        <button class="tab" data-tab="quiz">❓ Quiz</button>
+        <button class="tab" data-tab="flash">💡 Flashcards</button>
+        <button class="tab" data-tab="ask">💬 AI Tutor</button>
+      </div>
+
+      <!-- Lessons -->
+      <div id="tab-lessons" class="tab-content">
+        <div class="card glass" id="objectivesBox"></div>
+        <div class="card glass" id="outlineBox"></div>
+        <div class="card glass" id="summariesBox"></div>
+      </div>
+
+      <!-- Quiz -->
+      <div id="tab-quiz" class="tab-content" style="display:none;">
+        <div class="card glass" id="quizBox"></div>
+      </div>
+
+      <!-- Flashcards -->
+      <div id="tab-flash" class="tab-content" style="display:none;">
+        <div class="card glass" id="flashBox"></div>
+      </div>
+
+      <!-- Ask tutor -->
+      <div id="tab-ask" class="tab-content" style="display:none;">
+        <div class="card glass" id="askBox"></div>
+      </div>
+    </section>
+  </div>
+
+  <script src="/static/js/app.js"></script>
+</body>
+</html>

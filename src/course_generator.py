@@ -12,9 +12,20 @@ from .models import CourseOutput
 class CourseGenerator:
     """Orchestrates the full pipeline: input -> LLM -> validated output."""
 
-    def __init__(self, api_key: str, model: str = "gpt-4o", temperature: float = 0.7):
+    def __init__(
+        self,
+        api_key: str,
+        model: str = "gpt-4o",
+        temperature: float = 0.7,
+        provider: str = "openai",
+    ):
         self.doc_processor = DocumentProcessor()
-        self.llm_service = LLMService(api_key=api_key, model=model, temperature=temperature)
+        self.llm_service = LLMService(
+            api_key=api_key,
+            model=model,
+            temperature=temperature,
+            provider=provider,
+        )
 
     def generate_from_text(self, text: str) -> CourseOutput:
         content = self.doc_processor.process(text, is_file=False)
