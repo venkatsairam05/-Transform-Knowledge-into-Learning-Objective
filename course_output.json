@@ -1,0 +1,81 @@
+{
+  "courseTitle": "Introduction to Quantum Mechanics",
+  "learningObjectives": [
+    "Understand the fundamental principles of quantum mechanics, including wave-particle duality and the uncertainty principle",
+    "Explain the concept of quantization and its historical significance in physics",
+    "Analyze the Schrödinger equation and its role in describing quantum systems",
+    "Describe quantum phenomena such as superposition and entanglement",
+    "Identify real-world applications of quantum mechanics in technology and science"
+  ],
+  "lessonOutline": [
+    "1. Foundations of Quantum Theory",
+    "2. Wave-Particle Duality and the Uncertainty Principle",
+    "3. Quantization and Energy Levels",
+    "4. The Schrödinger Equation and Wave Functions",
+    "5. Superposition, Entanglement, and Applications"
+  ],
+  "quizQuestions": [
+    {
+      "question": "What does the principle of wave-particle duality state?",
+      "options": [
+        "All quantum entities exhibit both wave-like and particle-like properties",
+        "Particles can only behave as particles, never as waves",
+        "Waves and particles are fundamentally different phenomena",
+        "Quantum objects behave as waves during measurement only"
+      ],
+      "correctAnswerIndex": 0,
+      "explanation": "Wave-particle duality is a core concept in quantum mechanics stating that all quantum entities display both wave-like and particle-like characteristics depending on the experimental setup."
+    },
+    {
+      "question": "Who formulated the uncertainty principle?",
+      "options": [
+        "Erwin Schrödinger",
+        "Niels Bohr",
+        "Werner Heisenberg",
+        "Max Planck"
+      ],
+      "correctAnswerIndex": 2,
+      "explanation": "The uncertainty principle was formulated by Werner Heisenberg in 1927, establishing a fundamental limit on the precision of simultaneous measurements of certain pairs of physical properties."
+    },
+    {
+      "question": "What does the Schrödinger equation describe?",
+      "options": [
+        "The motion of classical particles in a gravitational field",
+        "The wave function of a quantum-mechanical system",
+        "The energy of a photon in electromagnetic radiation",
+        "The nuclear forces between protons and neutrons"
+      ],
+      "correctAnswerIndex": 1,
+      "explanation": "The Schrödinger equation is a fundamental equation in quantum mechanics that describes how the wave function of a physical system evolves over time."
+    },
+    {
+      "question": "What is quantum superposition?",
+      "options": [
+        "The process of combining multiple waves into one",
+        "A quantum system existing in multiple states simultaneously until measured",
+        "The alignment of particles in a magnetic field",
+        "The transfer of energy between quantum particles"
+      ],
+      "correctAnswerIndex": 1,
+      "explanation": "Superposition is the ability of a quantum system to be in multiple states at the same time. It remains in superposition until a measurement collapses it to a single state."
+    },
+    {
+      "question": "Which of the following is NOT an application of quantum mechanics?",
+      "options": [
+        "Semiconductor transistors",
+        "Magnetic Resonance Imaging (MRI)",
+        "Classical Newtonian mechanics",
+        "Quantum computing"
+      ],
+      "correctAnswerIndex": 2,
+      "explanation": "Classical Newtonian mechanics is a separate framework that predates quantum mechanics. The other options — semiconductors, MRI, and quantum computing — all rely on quantum mechanical principles."
+    }
+  ],
+  "lessonSummaries": [
+    "This lesson introduces the origins of quantum mechanics and why classical physics was insufficient to explain phenomena at atomic scales. Students learn that quantum theory revolutionized our understanding of nature by introducing discrete energy levels and probabilistic behavior.",
+    "This lesson covers wave-particle duality, showing how particles like electrons exhibit interference patterns, and the Heisenberg uncertainty principle, which limits our ability to simultaneously measure complementary properties like position and momentum.",
+    "This lesson explains the concept of quantization — that energy and other physical quantities come in discrete units called quanta. Students explore Max Planck's solution to the blackbody radiation problem and how quantization became foundational to modern physics.",
+    "This lesson dives into the Schrödinger equation, the central equation of quantum mechanics. Students learn about wave functions, probability amplitudes, and how the Hamiltonian operator governs the time evolution of quantum systems.",
+    "This lesson explores quantum superposition and entanglement, two of the most counterintuitive yet experimentally verified phenomena in physics. Students also examine practical applications including semiconductors, lasers, MRI technology, and emerging quantum computing."
+  ]
+}

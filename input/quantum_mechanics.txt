@@ -1,0 +1,31 @@
+Quantum mechanics is a fundamental theory in physics that provides a description of the physical properties of nature at the scale of atoms and subatomic particles. It is the foundation of all quantum physics, including quantum chemistry, quantum field theory, quantum technology, and quantum information science.
+
+Classical physics, which existed before the advent of quantum mechanics, describes nature at ordinary (macroscopic) scale. It fails to explain how matter radiates light at certain frequencies, how substances can be both particles and waves at the same time, or how particles can seem to be in multiple places at once.
+
+Key Principles of Quantum Mechanics:
+
+1. Wave-Particle Duality: All quantum entities exhibit both wave-like and particle-like properties. For example, electrons produce interference patterns similar to waves, but can also be counted as discrete particles.
+
+2. The Uncertainty Principle: Formulated by Werner Heisenberg, this principle states that there is a fundamental limit to the precision with which certain pairs of physical properties, such as position and momentum, can be simultaneously known.
+
+3. Quantization: Energy, matter, and other physical quantities are not continuous but come in discrete units called quanta. Max Planck introduced this concept in 1900 to explain blackbody radiation.
+
+4. Superposition: A quantum system can exist in multiple states simultaneously until it is measured. The famous thought experiment "Schrödinger's cat" illustrates this concept.
+
+5. Entanglement: Two or more quantum particles can become correlated in such a way that the quantum state of each particle cannot be described independently. Measuring one particle instantaneously affects the other, regardless of the distance between them.
+
+The Schrödinger Equation:
+The Schrödinger equation is a linear partial differential equation that describes the wave function of a quantum-mechanical system. It is one of the most important equations in quantum mechanics and was formulated by Erwin Schrödinger in 1925.
+
+The time-dependent Schrödinger equation is:
+iℏ ∂Ψ/∂t = ĤΨ
+
+where i is the imaginary unit, ℏ is the reduced Planck constant, Ψ is the wave function, and Ĥ is the Hamiltonian operator.
+
+Applications of Quantum Mechanics:
+- Semiconductors and transistors (basis of all modern electronics)
+- Lasers and optical devices
+- Magnetic Resonance Imaging (MRI)
+- Quantum computing and quantum cryptography
+- Nuclear energy and nuclear magnetic resonance
+- Chemical bonding and molecular structure
