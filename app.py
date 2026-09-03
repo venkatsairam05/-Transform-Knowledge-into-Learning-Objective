@@ -414,9 +414,11 @@ def init_state():
 
 
 def render_sidebar():
-    secret_key = ""
+    secret_openai = ""
+    secret_gemini = ""
     try:
-        secret_key = st.secrets.get("OPENAI_API_KEY", "")
+        secret_openai = st.secrets.get("OPENAI_API_KEY", "")
+        secret_gemini = st.secrets.get("GEMINI_API_KEY", "")
     except Exception:
         pass
 
@@ -425,13 +427,36 @@ def render_sidebar():
             "<h3>\U00002699\ufe0f Configuration</h3>",
             unsafe_allow_html=True,
         )
-        if secret_key:
-            st.success("\U0001f512 API key loaded from deployment secrets.")
-        api_key = st.text_input(
-            "OpenAI API Key", type="password", placeholder="sk-...",
-            value=secret_key if secret_key else "", help="Loaded from secrets if deployed.",
+        provider = st.radio(
+            "AI Provider",
+            ["OpenAI", "Gemini (free)"],
+            index=0,
+            help="Choose which LLM provider to use.",
         )
-        model = st.selectbox("Model", ["gpt-4o", "gpt-4o-mini", "gpt-4-turbo"], index=0)
+        is_gemini = provider.startswith("Gemini")
+        env_var = "GEMINI_API_KEY" if is_gemini else "OPENAI_API_KEY"
+        secret_val = secret_gemini if is_gemini else secret_openai
+
+        if secret_val:
+            st.success("\U0001f512 API key loaded from deployment secrets.")
+
+        api_key = st.text_input(
+            "API Key",
+            type="password",
+            placeholder="AIza..." if is_gemini else "sk-...",
+            value=secret_val if secret_val else "",
+            help="Loaded from secrets if deployed.",
+        )
+
+        if is_gemini:
+            model = st.selectbox(
+                "Model", ["gemini-3.6-flash", "gemini-3.6-pro"], index=0
+            )
+        else:
+            model = st.selectbox(
+                "Model", ["gpt-4o", "gpt-4o-mini", "gpt-4-turbo"], index=0
+            )
+
         temperature = st.slider("Creativity", 0.0, 1.0, 0.7, 0.05)
         st.divider()
         st.markdown("#### \U0001f4cc How it works")
@@ -443,7 +468,7 @@ def render_sidebar():
         )
         if not api_key:
             st.warning("Add your API key to activate generation.")
-    return api_key, model, temperature
+    return api_key, model, temperature, provider
 
 
 def extract_text(uploaded) -> str:
@@ -455,8 +480,13 @@ def extract_text(uploaded) -> str:
     return uploaded.read().decode("utf-8")
 
 
-def generate_course(content, api_key, model, temperature):
-    llm = LLMService(api_key=api_key, model=model, temperature=temperature)
+def generate_course(content, api_key, model, temperature, provider):
+    llm = LLMService(
+        api_key=api_key,
+        model=model,
+        temperature=temperature,
+        provider=provider,
+    )
     raw = llm.generate_course(content)
     return raw, CourseOutput.from_dict(raw).to_dict()
 
@@ -619,7 +649,7 @@ def render_flashcards(course):
     st.markdown("</div>", unsafe_allow_html=True)
 
 
-def render_ask(course, api_key, model, temperature):
+def render_ask(course, api_key, model, temperature, provider):
     st.markdown("<div class='glass'>", unsafe_allow_html=True)
     st.subheader("\U0001f4ac Ask Your AI Tutor")
     st.markdown(
@@ -634,7 +664,12 @@ def render_ask(course, api_key, model, temperature):
         st.session_state.chat_history.append({"role": "user", "content": question})
         with st.spinner("Tutor is thinking..."):
             try:
-                llm = LLMService(api_key=api_key, model=model, temperature=temperature)
+                llm = LLMService(
+                    api_key=api_key,
+                    model=model,
+                    temperature=temperature,
+                    provider=provider,
+                )
                 answer = llm.answer_question(course["courseTitle"], content_section, question)
                 st.session_state.chat_history.append({"role": "bot", "content": answer})
             except Exception as e:
@@ -649,7 +684,8 @@ def render_ask(course, api_key, model, temperature):
 
 def main():
     init_state()
-    api_key, model, temperature = render_sidebar()
+    api_key, model, temperature, provider = render_sidebar()
+    provider = "gemini" if provider.startswith("Gemini") else "openai"
 
     st.markdown(CUSTOM_CSS, unsafe_allow_html=True)
     render_hero()
@@ -687,7 +723,7 @@ def main():
         if do_gen and content and api_key:
             with st.spinner("Crafting your course... \u23f3"):
                 try:
-                    _, result = generate_course(content, api_key, model, temperature)
+                    _, result = generate_course(content, api_key, model, temperature, provider)
                     st.session_state.course_result = result
                     st.session_state.course_json = json.dumps(result, indent=2, ensure_ascii=False)
                     st.session_state.chat_history = []
@@ -731,7 +767,7 @@ def main():
 
     with tab_ask:
         if course_result:
-            render_ask(course_result, api_key, model, temperature)
+            render_ask(course_result, api_key, model, temperature, provider)
         else:
             st.info("No course yet. Generate one in the \u2728 Generate tab.")
 
