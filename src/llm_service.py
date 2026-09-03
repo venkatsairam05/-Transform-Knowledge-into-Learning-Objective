@@ -85,6 +85,61 @@ class LLMService:
             f"Failed after {self.max_retries} attempts. Last error: {last_error}"
         )
 
+    def answer_question(
+        self, course_title: str, content_section: str, question: str
+    ) -> str:
+        """Answer a follow-up question accurately based on the course material."""
+        messages = self.prompt_engineer.build_answer_messages(
+            course_title, content_section, question
+        )
+
+        last_error: Optional[Exception] = None
+        for attempt in range(1, self.max_retries + 1):
+            try:
+                response = self.client.chat.completions.create(
+                    model=self.model,
+                    messages=messages,
+                    temperature=0.3,  # lower temperature for factual accuracy
+                    max_tokens=1024,
+                    response_format={"type": "json_object"},
+                )
+                raw = response.choices[0].message.content or ""
+                return self.prompt_engineer.parse_answer(raw)
+
+            except (RateLimitError, APIConnectionError) as e:
+                last_error = e
+                wait = 2 ** attempt
+                print(
+                    f"Attempt {attempt}/{self.max_retries} failed ({type(e).__name__}). "
+                    f"Retrying in {wait}s...",
+                    file=sys.stderr,
+                )
+                time.sleep(wait)
+
+            except APIStatusError as e:
+                if e.status_code >= 500:
+                    last_error = e
+                    wait = 2 ** attempt
+                    print(
+                        f"Attempt {attempt}/{self.max_retries} failed (server error {e.status_code}). "
+                        f"Retrying in {wait}s...",
+                        file=sys.stderr,
+                    )
+                    time.sleep(wait)
+                else:
+                    raise RuntimeError(f"API error {e.status_code}: {e.message}") from e
+
+            except Exception as e:
+                last_error = e
+                print(
+                    f"Attempt {attempt}/{self.max_retries} failed. Retrying...",
+                    file=sys.stderr,
+                )
+
+        raise RuntimeError(
+            f"Failed to answer question after {self.max_retries} attempts. Last error: {last_error}"
+        )
+
     @staticmethod
     def _validate_schema(data: dict) -> None:
         required = [
