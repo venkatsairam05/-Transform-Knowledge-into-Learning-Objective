@@ -4,7 +4,15 @@
     {
       "src": "api/index.py",
       "use": "@vercel/python",
-      "includeFiles": ["templates/**", "static/**", "src/**", "web_app.py", "*.txt"]
+      "config": {
+        "includeFiles": [
+          "templates/**",
+          "static/**",
+          "src/**",
+          "web_app.py",
+          "*.txt"
+        ]
+      }
     }
   ],
   "routes": [

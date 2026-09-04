@@ -27,3 +27,6 @@ Thumbs.db
 
 # Project output (keep course_output.json as sample)
 output/course_*.json
+
+.vercel
+.env*
