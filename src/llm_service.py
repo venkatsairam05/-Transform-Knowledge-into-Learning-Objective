@@ -160,6 +160,13 @@ class OpenAIProvider(LLMClient):
             raise RuntimeError(f"API error {e.status_code}: {e.message}") from e
 
 
+GEMINI_FALLBACK_MODELS = (
+    "gemini-3.6-flash",
+    "gemini-3.5-flash",
+    "gemini-3.7-flash",
+)
+
+
 class GeminiProvider(LLMClient):
     def __init__(self, api_key: str, model: str = "gemini-3.6-flash", temperature: float = 0.7, max_retries: int = 3):
         super().__init__(model, temperature, max_retries)
@@ -167,6 +174,19 @@ class GeminiProvider(LLMClient):
         from google.genai import types
         self._client = genai.Client(api_key=api_key)
         self._types = types
+        candidates = [model] + [m for m in GEMINI_FALLBACK_MODELS if m != model]
+        self._models = [m for m in candidates if m]
+        self._model_index = 0
+
+    def _active_model(self) -> str:
+        return self._models[self._model_index]
+
+    def _advance_model(self) -> bool:
+        if self._model_index < len(self._models) - 1:
+            self._model_index += 1
+            self.model = self._models[self._model_index]
+            return True
+        return False
 
     def _complete(self, messages, temperature, max_tokens) -> str:
         system = "\n\n".join(m["content"] for m in messages if m["role"] == "system")
@@ -178,22 +198,35 @@ class GeminiProvider(LLMClient):
             system_instruction=system,
             response_mime_type="application/json",
         )
-        try:
-            response = self._client.models.generate_content(
-                model=self.model,
-                contents=user,
-                config=config,
-            )
-            return response.text or ""
-        except Exception as e:
-            msg = str(e).lower()
-            if "quota" in msg or "rate" in msg or "429" in msg:
-                raise RateLimit(str(e)) from e
-            if "permission" in msg or "api key" in msg or "403" in msg:
-                raise RuntimeError(f"Gemini auth/API error: {e}") from e
-            if "500" in msg or "503" in msg:
-                raise ServerError(str(e)) from e
-            raise e
+
+        last_error: Optional[Exception] = None
+        for _ in range(len(self._models)):
+            active = self._active_model()
+            try:
+                response = self._client.models.generate_content(
+                    model=active,
+                    contents=user,
+                    config=config,
+                )
+                if not response.text:
+                    raise ServerError(f"Empty response from {active}")
+                return response.text
+
+            except Exception as e:
+                msg = str(e).lower()
+                if "quota" in msg or "rate" in msg or "429" in msg:
+                    last_error = RateLimit(str(e))
+                elif "permission" in msg or "api key" in msg or "403" in msg:
+                    raise RuntimeError(f"Gemini auth/API error: {e}") from e
+                elif any(code in msg for code in ("500", "502", "503", "504", "404", "not_found", "unavailable")):
+                    last_error = ServerError(str(e))
+                else:
+                    raise e
+
+                if not self._advance_model():
+                    raise last_error from e
+
+        raise last_error if last_error else ServerError("Gemini request failed")
 
 
 def create_llm(
